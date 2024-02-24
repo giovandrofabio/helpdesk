@@ -33,8 +33,16 @@ public class TecnicoService {
 	public Tecnico create(TecnicoDTO objDTO) {
 		objDTO.setId(null);
 		validaPorCpfEEmail(objDTO);
-		Tecnico newobj = new Tecnico(objDTO); 
+		Tecnico newobj = new Tecnico(objDTO);
 		return repository.save(newobj);
+	}
+
+	public Tecnico update(Integer id, TecnicoDTO objDTO) {
+		objDTO.setId(id);
+		Tecnico oldObj = findById(id);
+		validaPorCpfEEmail(objDTO);
+		oldObj = new Tecnico(objDTO);
+		return repository.save(oldObj);
 	}
 
 	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
