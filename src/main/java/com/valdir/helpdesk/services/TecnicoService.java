@@ -14,6 +14,8 @@ import com.valdir.helpdesk.repositories.PessoaRepository;
 import com.valdir.helpdesk.repositories.TecnicoRepository;
 import com.valdir.helpdesk.services.exceptions.ObjectnotFoundException;
 
+import javax.validation.Valid;
+
 @Service
 public class TecnicoService {
 
@@ -42,9 +44,12 @@ public class TecnicoService {
 		return repository.save(newobj);
 	}
 
-	public Tecnico update(Integer id, TecnicoDTO objDTO) {
+	public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
 		objDTO.setId(id);
 		Tecnico oldObj = findById(id);
+		if(!objDTO.getSenha().equals(oldObj.getSenha())) {
+			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+		}
 		validaPorCpfEEmail(objDTO);
 		oldObj = new Tecnico(objDTO);
 		return repository.save(oldObj);
